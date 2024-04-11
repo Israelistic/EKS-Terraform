@@ -1,51 +1,49 @@
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~>5.7.0"
+  version = "~>5.7.1"
 
-  # VPC Basic Details   
-  name = "vpc-dev"
-  cidr = "10.0.0.0/16"
-  # azs             = ["ca-central-1a", "ca-central-1b"]
+  # VPC Basic Details
+  name = local.eks_cluster_name
+  cidr = var.vpc_cidr_block
+  #azs             = var.vpc_availability_zones
   azs             = data.aws_availability_zones.available.names
-  private_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
-  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24"]
+  public_subnets  = var.vpc_public_subnets
+  private_subnets = var.vpc_private_subnets  
 
-  # NAT Gatewats - Outbound Communication
-  enable_nat_gateway = true
-  single_nat_gateway = true
-  #   enable_vpn_gateway = true
+  # Database Subnets
+  database_subnets                   = var.vpc_database_subnets
+  create_database_subnet_group       = var.vpc_create_database_subnet_group
+  create_database_subnet_route_table = var.vpc_create_database_subnet_route_table
+  # create_database_internet_gateway_route = true
+  # create_database_nat_gateway_route = true
+
+  # NAT Gateways - Outbound Communication
+  enable_nat_gateway = var.vpc_enable_nat_gateway
+  single_nat_gateway = var.vpc_single_nat_gateway
 
   # VPC DNS Parameters
   enable_dns_hostnames = true
   enable_dns_support   = true
 
-  # Database Subnets
+  tags     = local.common_tags
+  vpc_tags = local.common_tags
 
-  create_database_subnet_group       = true
-  create_database_subnet_route_table = true
-  #   create_database_internet_gateway_route = true
-  #   create_database_nat_gateway_route      = true
-  database_subnets = ["10.0.15.0/24", "10.0.152.0/24"]
-
+  # Additional Tags to Subnets
   public_subnet_tags = {
-    Name = "Public-subnets"
-
+    Type                                              = "Public Subnets"
+    "kubernetes.io/role/elb"                          = 1
+    "kubernetes.io/cluster/${local.eks_cluster_name}" = "shared"
   }
-
   private_subnet_tags = {
-    Name = "Private-subnets"
+    Type                                              = "private-subnets"
+    "kubernetes.io/role/internal-elb"                 = 1
+    "kubernetes.io/cluster/${local.eks_cluster_name}" = "shared"
   }
 
   database_subnet_tags = {
-    Name = "Database-subnets"
+    Type = "database-subnets"
   }
-  vpc_tags = {
-    Name = "vpc-dev"
-  }
+  # Instances launched into the Public subnet should be assigned a public IP address.
+  map_public_ip_on_launch = true
 
-  tags = {
-    Owner       = "Haggai"
-    Terraform   = "true"
-    Environment = "dev"
-  }
 }
