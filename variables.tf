@@ -16,7 +16,7 @@ variable "environment" {
 variable "business_divsion" {
   description = "Business Division in the large organization this Infrastructure belongs"
   type        = string
-  default     = "RBC"
+  default     = "Haggai-Lerman"
 }
 
 # VPC Input Variables
@@ -25,7 +25,7 @@ variable "business_divsion" {
 variable "vpc_name" {
   description = "VPC Name"
   type        = string
-  default     = "myvpc"
+  default     = "Haggai"
 }
 
 # VPC CIDR Block
@@ -96,10 +96,6 @@ variable "vpc_single_nat_gateway" {
 
 
 
-
-
-
-
 # AWS EC2 Instance Terraform Variables
 
 # AWS EC2 Instance Type
@@ -115,10 +111,3 @@ variable "instance_keypair" {
   type        = string
   default     = "eks-terraform-key"
 }
-# EKS Cluster Input Variables
-variable "cluster_name" {
-  description = "Name of the EKS cluster. Also used as a prefix in names of related resources."
-  type        = string
-  default     = "eksdemo"
-}
-
