@@ -1,2 +1,2 @@
 EKS-Terraform A 3- Tier Architecure Design using Terraform
-![EKS Cluster](https://github.com/Israelistic/EKS-Terraform/assets/7020314/d70f37db-8504-4bb9-82cb-2b20936ad300)
+![EKS Cluster](https://github.com/Israelistic/EKS-Terraform/assets/7020314/db71ac4e-4c13-4260-9323-3ab6f19e3a57)
