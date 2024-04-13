@@ -86,5 +86,4 @@ output "node_group_private_version" {
   description = "Private Node Group Kubernetes Version"
   value       = aws_eks_node_group.eks_ng_private.version
 }
-
 */
