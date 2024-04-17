@@ -167,3 +167,79 @@ kubectl get nodes -o wide
 http://<node1-public-ip>:<Node-Port>
 
 NOTE: you have to allow inboud traffic on Security-group= sg-*-eks-remoteAccess-*-*-* from you EKS service on AWS console
+
+
+
+- **Important Note about: target-port**
+  -  If target-port is not defined, by default and for convenience, the **targetPort** is set to the same value as the **port** field.
+
+# Below command will fail when accessing the application, as service port (81) and container port (80) are different
+kubectl expose pod my-nginx  --type=NodePort --port=81 --name=my-nginx-svc2
+
+# Expose Pod as a Service with Container Port (--taret-port)
+kubectl expose pod my-nginx --type=NodePort --port=81 --target-port=80 --name=my-nginx
+
+
+# Get Pod Name
+kubectl get po
+
+# Dump Pod logs
+kubectl logs <pod-name>
+kubectl logs my-nginx
+
+# Stream pod logs with -f option and access application to see logs
+kubectl logs <pod-name>
+kubectl logs -f my-nginx
+
+- **Important Notes**
+  - Refer below link and search for **Interacting with running Pods** for additional log options
+  - Troubleshooting skills are very important. So please go through all logging options available and master them.
+  - **Reference:** https://kubernetes.io/docs/reference/kubectl/cheatsheet/
+
+
+### Connect to Container in a POD
+
+- **Connect to a Container in POD and execute commands**
+
+# Connect to Nginx Container in a POD
+kubectl exec -it <pod-name> -- /bin/bash
+kubectl exec -it my-nginx -- /bin/bash
+
+# Execute some commands in Nginx container
+ls
+cd /usr/share/nginx/html
+cat index.html
+exit
+
+
+- **Running individual commands in a Container**
+kubectl exec -it <pod-name> env
+
+# Sample Commands
+kubectl exec [POD] -- [COMMAND] instead
+ kubectl exec my-nginx -- env
+ kubectl exec my-nginx -- ls
+ kubectl exec my-nginx --cat /usr/share/nginx/html/index.html
+
+ ### Get YAML Output
+
+# Get pod definition YAML output
+kubectl get pod my-nginx -o yaml   
+
+# Get service definition YAML output
+kubectl get service my-nginx-svc -o yaml   
+
+## Step-07: Clean-Up
+```
+# Get all Objects in default namespace
+kubectl get all
+
+# Delete Services
+kubectl delete svc my-nginx-svc
+
+
+# Delete Pod
+kubectl delete pod my-nginx
+
+# Get all Objects in default namespace
+kubectl get all
