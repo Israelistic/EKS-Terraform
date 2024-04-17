@@ -70,3 +70,52 @@ kubectl delete pod <Pod-Name>
 # Verify the new pod got created automatically
 kubectl get pods   (Verify Age and name of new pod)
 
+
+- Test how scalability is going to seamless & quick
+- Update the **replicas** field in **replicaset-demo.yml** from 3 to 6.
+# Before change
+spec:
+  replicas: 3
+
+# After change
+spec:
+  replicas: 6
+
+# Apply latest changes to ReplicaSet
+kubectl replace -f replicaset-demo.yml
+
+# Verify if new pods got created
+kubectl get pods -o wide
+
+ or
+
+kubectl scale rs/replicaset-demo --replicas=10; watch kubectl get pods -o wide
+( you might need to install watch)
+
+# Delete ReplicaSet
+kubectl delete rs <ReplicaSet-Name>
+
+# Sample Commands
+kubectl delete rs/replicaset-demo
+[or]
+kubectl delete rs replicaset-demo-rs
+
+# Verify if ReplicaSet got deleted
+kubectl get rs
+```
+
+### Delete Service created for ReplicaSet
+```
+# Delete Service
+kubectl delete svc <service-name>
+
+# Sample Commands
+kubectl delete svc replicaset-demo-rservice
+[or]
+kubectl delete svc/replicaset-demo-rs-service
+
+# Verify if Service got deleted
+kubectl get svc
+```
+
+
