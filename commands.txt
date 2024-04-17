@@ -94,3 +94,76 @@ kubectl describe ds kube-proxy -n kube-system
 
 # Describe coredns Deployment
 kubectl describe deploy coredns -n kube-system
+
+
+
+# Create  a Pod
+kubectl run <desired-pod-name> --image <Container-Image> --generator=run-pod/v1
+kubectl run my-nginx --image my-nginx
+
+### List Pods
+- Get the list of pods
+
+# List Pods
+kubectl get pods
+
+# Alias name for pods is po
+kubectl get po
+
+
+### List Pods with wide option
+- List pods with wide option which also provide Node information on which Pod is running
+
+kubectl get pods -o wide
+
+
+### Describe Pod
+- Describe the POD, primarily required during troubleshooting. 
+- Events shown will be of a great help during troubleshooting. 
+
+# To get list of pod names
+kubectl get pods
+
+# Describe the Pod
+kubectl describe pod <Pod-Name>
+kubectl describe pod my-nginx
+
+
+### Access Application
+- Currently we can access this application only inside worker nodes. 
+- To access it externally, we need to create a **NodePort Service**. 
+- **Services** is one very very important concept in Kubernetes. 
+
+
+### Delete Pod
+
+# To get list of pod names
+kubectl get pods
+
+# Delete Pod
+kubectl delete pod <Pod-Name>
+kubectl delete pod my-nginx
+
+- Expose pod with a service (NodePort Service) to access the application externally (from internet)
+- **Ports**
+- **port:** Port on which node port service listens in Kubernetes cluster internally
+- **targetPort:** We define container port here on which our application is running.
+- **NodePort:** Worker Node port on which we can access our application.
+
+# Expose Pod as a Service
+kubectl expose pod my-nginx  --type=NodePort --port=80 --name=my-nginx-svc
+
+
+# Get Service Info
+kubectl get service
+kubectl get svc
+
+# Get Public IP of Worker Nodes
+kubectl get nodes -o wide
+
+
+#- **Access the Application using Public IP**
+
+http://<node1-public-ip>:<Node-Port>
+
+NOTE: you have to allow inboud traffic on Security-group= sg-*-eks-remoteAccess-*-*-* from you EKS service on AWS console
