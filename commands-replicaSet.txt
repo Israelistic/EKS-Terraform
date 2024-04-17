@@ -1,0 +1,72 @@
+kubectl create deployment nginx --image=nginx --dry-run=client -o yaml | tee nginx-deployment.yaml | kubectl apply -f -
+- Create ReplicaSet
+
+kubectl create -f replicaset-demo.yml
+
+
+### List ReplicaSets
+- Get list of ReplicaSets
+
+kubectl get replicaset
+kubectl get rs
+
+
+### Describe ReplicaSet
+- Describe the newly created ReplicaSet
+
+kubectl describe rs/<replicaset-name>
+kubectl describe rs/my-nginx-rs
+kubectl describe rs my-nginx-rs
+
+
+### List of Pods
+- Get list of Pods
+
+#Get list of Pods
+kubectl get pods
+kubectl describe pod <pod-name>
+
+# Get list of Pods with Pod IP and Node in which it is running
+kubectl get pods -o wide
+
+### Verify the Owner of the Pod
+- Verify the owner reference of the pod.
+- Verify under **"name"** tag under **"ownerReferences"**. We will find the replicaset name to which this pod belongs to. 
+
+kubectl get pods <pod-name> -o yaml
+kubectl get pods my-nginx-rs-88gbn -o yaml 
+
+- Expose ReplicaSet with a service (NodePort Service) to access the application externally (from internet)
+
+# Expose ReplicaSet as a Service
+kubectl expose rs <ReplicaSet-Name>  --type=NodePort --port=80 --target-port=8080 --name=<Service-Name-To-Be-Created>
+kubectl expose rs my-nginx-rs  --type=NodePort --port=80 --target-port=8080 --name=my-nginx-rs-svc
+
+# Get Service Info
+kubectl get service
+kubectl get svc
+
+# Get Public IP of Worker Nodes
+kubectl get nodes -o wide
+
+
+- **Access the Application using Public IP**
+
+http://<node1-public-ip>:<Node-Port>/hello
+
+NOTE: you have to allow inboud traffic on Security-group= sg-*-eks-remoteAccess-*-*-* from you EKS service on AWS console
+
+
+
+Test how the high availability or reliability concept is achieved automatically in Kubernetes
+- Whenever a POD is accidentally terminated due to some application issue, ReplicaSet should auto-create that Pod to maintain desired number of Replicas configured to achive High Availability.
+
+# To get Pod Name
+kubectl get pods
+
+# Delete the Pod
+kubectl delete pod <Pod-Name>
+
+# Verify the new pod got created automatically
+kubectl get pods   (Verify Age and name of new pod)
+
