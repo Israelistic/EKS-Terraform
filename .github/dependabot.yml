@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: "terraform"
+    directory: "/" # Dependabot doesn't recursively search for directories
+    schedule:
+      interval: "daily" # weekdays only
+      time: "09:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 10 
+    allow:
+      - dependency-type: "all"
