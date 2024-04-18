@@ -15,11 +15,11 @@ resource "aws_eks_node_group" "eks_ng_public" {
 
   remote_access {
     ec2_ssh_key = "eks-terraform-key"
-   # source_security_group_ids = # 
+    # source_security_group_ids = # 
   }
 
   scaling_config {
-    desired_size = 1
+    desired_size = 2
     min_size     = 1
     max_size     = 2
   }
