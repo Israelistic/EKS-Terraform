@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: myapp-rs  
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+  template: 
+    metadata: # Dictionary
+      name: myapp-pod
+      labels: # Dictionary 
+        app: myapp       
+    spec:
+      containers: # List
+        - name: myapp-nginx
+          image: nginxinc/nginx
+          ports:
+            - containerPort: 31232
+
+
+    

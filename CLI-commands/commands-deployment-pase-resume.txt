@@ -1,0 +1,19 @@
+### Pause Deployment and Two Changes
+
+# Pause the Deployment
+kubectl rollout pause deployment/<Deployment-Name>
+kubectl rollout pause deployment/my-nginx
+
+# Update Deployment - Application Version from V3 to V4
+kubectl set image deployment/my-nginx nginx=nginx --record=true
+
+# Check the Rollout History of a Deployment
+kubectl rollout history deployment/my-nginx  
+Observation: No new rollout should start, we should see same number of versions as we check earlier with last version number matches which we have noted earlier.
+
+# Get list of ReplicaSets
+kubectl get rs
+Observation: No new replicaSet created. We should have same number of replicaSets as earlier when we took note. 
+
+# Make one more change: set limits to our container
+kubectl set resources deployment/my-nginx -c=kubenginx --limits=cpu=20m,memory=30Mi
