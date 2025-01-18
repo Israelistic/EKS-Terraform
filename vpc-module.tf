@@ -1,6 +1,6 @@
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~>5.16.0"
+  version = "~>5.17.0"
 
   # VPC Basic Details
   name = local.eks_cluster_name
